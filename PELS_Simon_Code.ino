@@ -224,7 +224,7 @@ void playSequence() {
   showScreen("WATCH", "Remember colors");
 
   // Wait 2 seconds before starting
-  delay(2000);
+  delay(1000);
 
   // Flash LEDs in the stored order
   for (int i = 0; i < roundNumber; i++) {

@@ -1,11 +1,9 @@
 # PELS Simon Game Workshop
 
 ## Project Overview
-
 This project is a hardware-based **Simon Says memory game** built using an **Arduino Nano**, four colored LEDs, four push buttons, a passive buzzer, and an OLED display. The objective is to memorize and repeat an increasingly long sequence of colored LEDs and corresponding sounds. Each successful round adds another random color to the sequence, while the LED playback gradually increases in speed to make the game more challenging. The **OLED display** tracks the player's current score, round number, and game status. This project demonstrates concepts in **embedded systems, microcontroller programming, digital electronics, and hardware-software integration**.
 
 ## Project Objectives
-
 - Design and build an interactive memory game using an Arduino Nano.
 - Control LEDs and detect push-button inputs.
 - Generate random LED sequences for each new game.
@@ -15,7 +13,6 @@ This project is a hardware-based **Simon Says memory game** built using an **Ard
 - Implement scoring, game-over, and restart functionality.
 
 ## Hardware Components
-
 - **1× Arduino Nano** → Main microcontroller
 - **4× LEDs** → Red, Green, Blue, Yellow
 - **4× Push Buttons** → Player input
@@ -25,169 +22,113 @@ This project is a hardware-based **Simon Says memory game** built using an **Ard
 - **1× Breadboard** → Circuit assembly
 - **Jumper Wires** → Electrical connections
 
-## 🔌 Pin Configuration
+## Pin Configuration
 
 ### LEDs and Buttons
-
-- 🔴 **Red**
+- **Red**
   - LED → D2
   - Button → D3
 
-- 🟢 **Green**
+- **Green**
   - LED → D4
   - Button → D5
 
-- 🔵 **Blue**
+- **Blue**
   - LED → D6
   - Button → D7
 
-- 🟡 **Yellow**
+- **Yellow**
   - LED → D8
   - Button → D9
 
 ### Passive Buzzer
-
 - Positive (+) → D10
 - Negative (-) → GND
 
 ### OLED Display
-
 - SDA → A4
 - SCL → A5
-- VCC → Module-compatible power supply
+- VCC → +5V
 - GND → GND
+Buttons use `INPUT_PULLUP`, so each button connects its input pin to GND when pressed.
 
-> **Note:** Buttons use `INPUT_PULLUP`, so each button connects its input pin to GND when pressed.
-
----
-
-## 💻 Software Requirements
-
+## Software Requirements
 ### Development Environment
-
 - Arduino IDE
-- Arduino Nano (ATmega328P)
+- Arduino Nano 
 
 ### Required Libraries
-
 - `Wire.h` → I2C communication
 - `Adafruit_GFX.h` → Graphics and text rendering
 - `Adafruit_SSD1306.h` → OLED display control
-
 The Adafruit libraries can be installed through the **Arduino IDE Library Manager**.
 
----
-
-## 🕹️ How the Game Works
-
+## How the Game Works
 ### 1. Starting the Game
-
 When the Arduino powers on, the OLED displays:
-
 ```text
 SIMON
 Press any button
 ```
-
 Pressing any button starts a new game with a randomly generated sequence.
 
 ### 2. Displaying the Sequence
-
 The Arduino flashes LEDs in a random order.
-
 Each LED produces a unique sound through the buzzer.
-
 The player must memorize the sequence before attempting to repeat it.
 
 ### 3. Player Input
-
 After the sequence finishes, the player repeats the pattern using the four push buttons.
-
 Each button activates its corresponding LED and buzzer sound.
 
 ### 4. Scoring System
-
 When the player successfully repeats the entire sequence:
-
 - Score increases by **1 point**.
 - Round number increases by **1**.
 - One new color is added to the sequence.
 - LED playback becomes faster.
 
-**Example:**
-
-- Round 1 → 🔴
-- Round 2 → 🔴 🔵
-- Round 3 → 🔴 🔵 🟢
-- Round 4 → 🔴 🔵 🟢 🟡
-
-> **Note:** These are example sequences. Actual colors are randomly generated and can repeat.
-
 ### 5. Increasing Difficulty
-
 The LED playback becomes progressively faster as the player advances.
-
 - **Round 1** → 600 ms
 - **Round 5** → 520 ms
 - **Round 10** → 420 ms
 - **Round 15** → 320 ms
 - **Round 20** → 220 ms
 - **Round 21+** → 200 ms
-
 The LED illumination time decreases by **20 milliseconds per round** until reaching a minimum of **200 milliseconds**.
-
 There is also a fixed **180 ms pause** between LED flashes.
 
 ### 6. Game Over
-
 If the player presses an incorrect button, the game ends.
-
 The OLED displays:
-
 ```text
 GAME OVER
-
 Press to restart
-
 Score: XX
 ```
-
 The final score remains visible until the player presses another button.
 
 ### 7. Restarting
-
 Pressing any button after Game Over:
-
 - Resets the score to zero.
 - Resets the round number to one.
 - Generates a new random sequence.
 - Starts a new game.
 
-> **Note:** The current program supports up to 100 rounds per game.
-
----
-
-## 🔊 Buzzer Frequencies
-
+## Buzzer Frequencies
 Each LED is assigned a unique frequency using the Arduino `tone()` function.
+- **Red** → 330 Hz (E4)
+- **Green** → 392 Hz (G4)
+- **Blue** → 440 Hz (A4)
+- **Yellow** → 523 Hz (C5)
 
-- 🔴 **Red** → 330 Hz (E4)
-- 🟢 **Green** → 392 Hz (G4)
-- 🔵 **Blue** → 440 Hz (A4)
-- 🟡 **Yellow** → 523 Hz (C5)
 
-The buzzer produces the same pitch when an LED flashes and when its corresponding button is pressed.
-
----
-
-## 🏆 Competition Rules
-
+## Competition Rules
 This Simon Says game is designed for a **12-minute memory challenge competition**.
-
 Each participant has their own Arduino-based Simon Says game.
 
 ### Rules
-
 1. All participants begin when the 12-minute timer starts.
 2. Players attempt to complete as many rounds as possible.
 3. A wrong button ends the current game.
@@ -197,101 +138,21 @@ Each participant has their own Arduino-based Simon Says game.
 7. Only completed rounds before the timer expires count.
 8. The participant with the highest verified score wins.
 
-> **Important:** The 12-minute timer is external and is not controlled by the Arduino.
-
----
-
-## 🧠 Programming Concepts
-
-### Digital Input and Output
-
-The Arduino uses digital pins to control LEDs and detect button presses.
-
-- `digitalWrite()` → Controls the LEDs.
-- `digitalRead()` → Detects button inputs.
-- `pinMode()` → Configures input and output pins.
-
-### Random Number Generation
-
-The `random()` function generates random LED sequences.
-
-```cpp
-sequence[i] = random(0, 4);
-```
-
-Each number corresponds to one of the four LEDs.
-
-### Arrays
-
-Arrays store multiple related values.
-
-```cpp
-const byte ledPins[4] = {2, 4, 6, 8};
-const byte buttonPins[4] = {3, 5, 7, 9};
-```
-
-This makes it easier to organize the LEDs and buttons.
-
-### Functions
-
-The program uses functions to organize different tasks:
-
-- `setup()` → Initializes the hardware.
-- `loop()` → Controls the main game.
-- `showScreen()` → Displays OLED messages.
-- `updateOLED()` → Updates the round and score.
-- `flashLED()` → Activates an LED and its buzzer tone.
-- `readButton()` → Detects button presses.
-- `waitForButton()` → Waits for player input.
-- `playSequence()` → Displays the LED sequence.
-- `checkSequence()` → Checks the player's answer.
-- `startNewGame()` → Resets the game.
-
-### Conditional Statements
-
-The program uses `if` and `else` statements to determine whether the player's input is correct.
-
-### Loops
-
-- `for` loops → Repeat actions a specific number of times.
-- `while` loops → Continue checking for button presses or other conditions.
-
-### I2C Communication
-
-The OLED communicates with the Arduino using the I2C protocol.
-
-- **SDA (A4)** → Data signal
-- **SCL (A5)** → Clock signal
-
-### Sound Generation
-
-The Arduino uses `tone()` to generate different sound frequencies through the passive buzzer.
-
----
-
-## 🚀 Getting Started
-
+## Getting Started
 ### Step 1: Assemble the Circuit
-
 Connect the LEDs, buttons, buzzer, and OLED according to the pin configuration.
 
 ### Step 2: Install Arduino IDE
-
 Download the [Arduino IDE](https://www.arduino.cc/en/software).
 
 ### Step 3: Install Libraries
-
 Open the Arduino IDE and navigate to:
-
 **Sketch → Include Library → Manage Libraries**
-
 Install:
-
 - Adafruit GFX Library
 - Adafruit SSD1306
 
 ### Step 4: Upload the Code
-
 1. Connect the Arduino Nano to your computer.
 2. Open the project's `.ino` file.
 3. Select **Arduino Nano** under Tools → Board.
@@ -299,78 +160,7 @@ Install:
 5. Click **Upload**.
 
 ### Step 5: Start Playing
-
 1. Press any button to start.
 2. Watch the LED sequence.
 3. Repeat the sequence using the buttons.
 4. Continue completing rounds until a mistake is made.
-
----
-
-## 📁 Repository Structure
-
-```text
-Arduino-Simon-Says/
-│
-├── README.md
-│
-├── Simon_Says/
-│   └── Simon_Says.ino
-│
-├── hardware/
-│   ├── circuit-diagram.png
-│   └── breadboard-layout.png
-│
-└── images/
-    ├── completed-project.jpg
-    └── gameplay.jpg
-```
-
----
-
-## 📸 Project Images
-
-### Circuit Diagram
-
-![Circuit Diagram](hardware/circuit-diagram.png)
-
-### Completed Hardware
-
-![Completed Simon Says Game](images/completed-project.jpg)
-
-> **Note:** Replace these placeholder paths with the actual images uploaded to your repository.
-
----
-
-## 🔮 Future Improvements
-
-- [ ] Add adjustable difficulty levels.
-- [ ] Add a dedicated reset button.
-- [ ] Implement additional game-over sound effects.
-- [ ] Store high scores using EEPROM.
-- [ ] Design a custom PCB.
-- [ ] Create a 3D-printed enclosure.
-- [ ] Add wireless multiplayer score tracking.
-
----
-
-## 📚 Skills Demonstrated
-
-- Embedded Systems Programming
-- Arduino Development
-- Digital Circuit Design
-- Hardware-Software Integration
-- I2C Communication
-- Electronic Prototyping
-- Debugging and Troubleshooting
-- User Interface Design
-
----
-
-## 📝 Conclusion
-
-This project demonstrates the integration of multiple electronic components to create an interactive memory game using an Arduino Nano.
-
-The system combines **LED control, push-button inputs, audio feedback, random sequence generation, and OLED score tracking** to create an engaging gameplay experience.
-
-Through this project, practical experience was gained in **embedded systems development, circuit assembly, microcontroller programming, and hardware debugging**.
